@@ -1,6 +1,62 @@
-@KooliProjekt.WebAPI_HostAddress = http://localhost:5086
+﻿@host = http://localhost:5086
 
-GET {{KooliProjekt.WebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
+### Users - list
+GET {{host}}/api/Users/list
 
-###
+### Users - get (olemas)
+GET {{host}}/api/Users/get/1
+
+### Users - get (puudub)
+GET {{host}}/api/Users/get/99999
+
+### Users - get (id <= 0)
+GET {{host}}/api/Users/get/0
+
+### Tournaments - list
+GET {{host}}/api/Tournaments/list
+
+### Tournaments - get (olemas)
+GET {{host}}/api/Tournaments/get/1
+
+### Tournaments - get (puudub)
+GET {{host}}/api/Tournaments/get/99999
+
+### Tournaments - get (id <= 0)
+GET {{host}}/api/Tournaments/get/0
+
+### Teams - list
+GET {{host}}/api/Teams/list
+
+### Teams - get (olemas)
+GET {{host}}/api/Teams/get/1
+
+### Teams - get (puudub)
+GET {{host}}/api/Teams/get/99999
+
+### Teams - get (id <= 0)
+GET {{host}}/api/Teams/get/0
+
+### Matches - list
+GET {{host}}/api/Matches/list
+
+### Matches - get (olemas)
+GET {{host}}/api/Matches/get/1
+
+### Matches - get (puudub)
+GET {{host}}/api/Matches/get/99999
+
+### Matches - get (id <= 0)
+GET {{host}}/api/Matches/get/0
+
+### Predictions - list
+GET {{host}}/api/Predictions/list
+
+### Predictions - get (olemas)
+GET {{host}}/api/Predictions/get/1
+
+### Predictions - get (puudub)
+GET {{host}}/api/Predictions/get/99999
+
+### Predictions - get (id <= 0)
+GET {{host}}/api/Predictions/get/0
+
