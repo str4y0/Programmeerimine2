@@ -34,12 +34,32 @@ namespace KooliProjekt.WebAPI.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(int page = 1, int pageSize = 10)
         {
-            var query = new ListMatchesQuery();
+            var query = new ListMatchesQuery
+            {
+                Page = page,
+                PageSize = pageSize
+            };
             var result = await _mediator.Send(query);
 
             return Json(result);
+        }
+
+        [HttpPost("save")]
+        public async Task<IActionResult> Save([FromBody] SaveMatchCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            return Result(result);
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete([FromBody] DeleteMatchCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            return Result(result);
         }
     }
 }

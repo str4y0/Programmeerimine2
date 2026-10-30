@@ -60,3 +60,161 @@ GET {{host}}/api/Predictions/get/99999
 ### Predictions - get (id <= 0)
 GET {{host}}/api/Predictions/get/0
 
+
+############ SAVE / DELETE ############
+
+### Teams - save (uus)
+POST {{host}}/api/Teams/save
+Content-Type: application/json
+
+{ "id": 0, "name": "Testimaa" }
+
+### Teams - save (muutmine)
+POST {{host}}/api/Teams/save
+Content-Type: application/json
+
+{ "id": 1, "name": "Muudetud nimi" }
+
+### Teams - save (VIGANE: name puudub)
+POST {{host}}/api/Teams/save
+Content-Type: application/json
+
+{ "id": 0 }
+
+### Teams - save (VIGANE: id puudub)
+POST {{host}}/api/Teams/save
+Content-Type: application/json
+
+{ "id": 99999, "name": "X" }
+
+### Teams - save (VIGANE: dubleeriv nimi)
+POST {{host}}/api/Teams/save
+Content-Type: application/json
+
+{ "id": 0, "name": "Testimaa" }
+
+### Teams - delete
+DELETE {{host}}/api/Teams/delete
+Content-Type: application/json
+
+{ "id": 1 }
+
+### Teams - delete (VIGANE: puudub)
+DELETE {{host}}/api/Teams/delete
+Content-Type: application/json
+
+{ "id": 99999 }
+
+### Tournaments - save (uus)
+POST {{host}}/api/Tournaments/save
+Content-Type: application/json
+
+{ "id": 0, "name": "Test Cup 2026" }
+
+### Tournaments - save (VIGANE: liiga pikk nimi)
+POST {{host}}/api/Tournaments/save
+Content-Type: application/json
+
+{ "id": 0, "name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }
+
+### Tournaments - delete
+DELETE {{host}}/api/Tournaments/delete
+Content-Type: application/json
+
+{ "id": 1 }
+
+### Users - save (uus)
+POST {{host}}/api/Users/save
+Content-Type: application/json
+
+{ "id": 0, "name": "Test Kasutaja", "email": "test@example.com", "password": "Parool123!", "role": 0 }
+
+### Users - save (VIGANE: vigane e-post)
+POST {{host}}/api/Users/save
+Content-Type: application/json
+
+{ "id": 0, "name": "Vigane", "email": "see-ei-ole-email", "password": "x", "role": 0 }
+
+### Users - save (VIGANE: parool puudub)
+POST {{host}}/api/Users/save
+Content-Type: application/json
+
+{ "id": 0, "name": "Ilma paroolita", "email": "a@b.ee", "role": 0 }
+
+### Users - save (VIGANE: dubleeriv e-post)
+POST {{host}}/api/Users/save
+Content-Type: application/json
+
+{ "id": 0, "name": "Duplikaat", "email": "test@example.com", "password": "x", "role": 0 }
+
+### Users - delete
+DELETE {{host}}/api/Users/delete
+Content-Type: application/json
+
+{ "id": 2 }
+
+### Matches - save (uus)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 1, "stage": 3, "startTime": "2026-11-01T18:00:00", "homeTeamId": 1, "awayTeamId": 2 }
+
+### Matches - save (VIGANE: tournamentId puudub)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 99999, "stage": 3, "startTime": "2026-11-01T18:00:00" }
+
+### Matches - save (VIGANE: stage = 99)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 1, "stage": 99, "startTime": "2026-11-01T18:00:00" }
+
+### Matches - save (VIGANE: negatiivsed väravad)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 1, "stage": 0, "startTime": "2026-11-01T18:00:00", "homeTeamGoals": -5, "awayTeamGoals": -1 }
+
+### Matches - delete
+DELETE {{host}}/api/Matches/delete
+Content-Type: application/json
+
+{ "id": 1 }
+
+### Predictions - save (uus)
+POST {{host}}/api/Predictions/save
+Content-Type: application/json
+
+{ "id": 0, "userId": 1, "matchId": 1, "homeTeamGoals": 2, "awayTeamGoals": 1 }
+
+### Predictions - save (VIGANE: userId puudub)
+POST {{host}}/api/Predictions/save
+Content-Type: application/json
+
+{ "id": 0, "userId": 99999, "matchId": 1, "homeTeamGoals": 2, "awayTeamGoals": 1 }
+
+### Predictions - save (VIGANE: sama kasutaja + mäng uuesti)
+POST {{host}}/api/Predictions/save
+Content-Type: application/json
+
+{ "id": 0, "userId": 1, "matchId": 1, "homeTeamGoals": 0, "awayTeamGoals": 0 }
+
+### Predictions - save (VIGANE: negatiivsed väravad)
+POST {{host}}/api/Predictions/save
+Content-Type: application/json
+
+{ "id": 0, "userId": 1, "matchId": 2, "homeTeamGoals": -3, "awayTeamGoals": 100 }
+
+### Predictions - delete
+DELETE {{host}}/api/Predictions/delete
+Content-Type: application/json
+
+{ "id": 1 }
+
+### Predictions - save (VIGANE: homeTeamGoals on tekst)
+POST {{host}}/api/Predictions/save
+Content-Type: application/json
+
+{ "id": 0, "userId": 1, "matchId": 3, "homeTeamGoals": "abc", "awayTeamGoals": 1 }
