@@ -30,6 +30,11 @@ namespace KooliProjekt.WebAPI.Controllers
                 return NotFound();
             }
 
+            if (result.HasErrors)
+            {
+                return Result(result);
+            }
+
             return Json(result);
         }
 
@@ -42,6 +47,11 @@ namespace KooliProjekt.WebAPI.Controllers
                 PageSize = pageSize
             };
             var result = await _mediator.Send(query);
+
+            if (result.HasErrors)
+            {
+                return Result(result);
+            }
 
             return Json(result);
         }

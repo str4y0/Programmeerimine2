@@ -133,7 +133,7 @@ Content-Type: application/json
 POST {{host}}/api/Users/save
 Content-Type: application/json
 
-{ "id": 0, "name": "Vigane", "email": "see-ei-ole-email", "password": "x", "role": 0 }
+{ "id": 0, "name": "Vigane", "email": "see-ei-ole-email", "password": "Parool123!", "role": 0 }
 
 ### Users - save (VIGANE: parool puudub)
 POST {{host}}/api/Users/save
@@ -145,7 +145,7 @@ Content-Type: application/json
 POST {{host}}/api/Users/save
 Content-Type: application/json
 
-{ "id": 0, "name": "Duplikaat", "email": "test@example.com", "password": "x", "role": 0 }
+{ "id": 0, "name": "Duplikaat", "email": "test@example.com", "password": "Parool123!", "role": 0 }
 
 ### Users - delete
 DELETE {{host}}/api/Users/delete
@@ -153,11 +153,12 @@ Content-Type: application/json
 
 { "id": 2 }
 
-### Matches - save (uus)
+### Matches - save (uus, tulevikus, mõlemad võistkonnad teada)
+# Seedi järel on andmebaasis 70 mängu, seega uus mäng saab ID 71 (vt. Matches - list)
 POST {{host}}/api/Matches/save
 Content-Type: application/json
 
-{ "id": 0, "tournamentId": 1, "stage": 3, "startTime": "2026-11-01T18:00:00", "homeTeamId": 1, "awayTeamId": 2 }
+{ "id": 0, "tournamentId": 2, "stage": 3, "startTime": "2030-07-01T18:00:00", "homeTeamId": 3, "awayTeamId": 4 }
 
 ### Matches - save (VIGANE: tournamentId puudub)
 POST {{host}}/api/Matches/save
@@ -184,10 +185,12 @@ Content-Type: application/json
 { "id": 1 }
 
 ### Predictions - save (uus)
+# Ennustada saab ainult mängule, mis pole veel alanud ja mille võistkonnad on teada.
+# Selleks sobib eelmises sammus loodud mäng (ID 71).
 POST {{host}}/api/Predictions/save
 Content-Type: application/json
 
-{ "id": 0, "userId": 1, "matchId": 1, "homeTeamGoals": 2, "awayTeamGoals": 1 }
+{ "id": 0, "userId": 1, "matchId": 71, "homeTeamGoals": 2, "awayTeamGoals": 1 }
 
 ### Predictions - save (VIGANE: userId puudub)
 POST {{host}}/api/Predictions/save
@@ -199,13 +202,13 @@ Content-Type: application/json
 POST {{host}}/api/Predictions/save
 Content-Type: application/json
 
-{ "id": 0, "userId": 1, "matchId": 1, "homeTeamGoals": 0, "awayTeamGoals": 0 }
+{ "id": 0, "userId": 1, "matchId": 71, "homeTeamGoals": 0, "awayTeamGoals": 0 }
 
 ### Predictions - save (VIGANE: negatiivsed väravad)
 POST {{host}}/api/Predictions/save
 Content-Type: application/json
 
-{ "id": 0, "userId": 1, "matchId": 2, "homeTeamGoals": -3, "awayTeamGoals": 100 }
+{ "id": 0, "userId": 1, "matchId": 71, "homeTeamGoals": -3, "awayTeamGoals": 100 }
 
 ### Predictions - delete
 DELETE {{host}}/api/Predictions/delete
@@ -218,3 +221,335 @@ POST {{host}}/api/Predictions/save
 Content-Type: application/json
 
 { "id": 0, "userId": 1, "matchId": 3, "homeTeamGoals": "abc", "awayTeamGoals": 1 }
+
+############ VALIDAATORID: lisatestid ############
+# Käivita päringud ükshaaval (mitte kõiki järjest): delete-päringud on hävitavad
+# ja vanad testid kustutavad näiteks turniiri 1, võistkonna 1 ja kasutaja 2.
+# NB! ID-d eeldavad puhast, seedi andmetega andmebaasi:
+# 35 võistkonda, 35 turniiri, 70 mängu (poolfinaal + finaal igal turniiril).
+# Turniir 17 (FIFA World Cup 2002) mängud 33 ja 34 on ennustustega.
+# Mängud 69 ja 70 (UEFA Euro 2028) on tulevikus ja võistkonnad on teadmata.
+# Kui ID-d on teised, vaadake õiged väärtused list-päringutest.
+
+### Teams - list (VIGANE: page = 0)
+GET {{host}}/api/Teams/list?page=0&pageSize=10
+
+### Teams - list (VIGANE: pageSize = 0)
+GET {{host}}/api/Teams/list?page=1&pageSize=0
+
+### Teams - list (VIGANE: pageSize = 1000)
+GET {{host}}/api/Teams/list?page=1&pageSize=1000
+
+### Tournaments - list (VIGANE: page = 0)
+GET {{host}}/api/Tournaments/list?page=0&pageSize=10
+
+### Tournaments - list (VIGANE: pageSize = 0)
+GET {{host}}/api/Tournaments/list?page=1&pageSize=0
+
+### Tournaments - list (VIGANE: pageSize = 1000)
+GET {{host}}/api/Tournaments/list?page=1&pageSize=1000
+
+### Matches - list (VIGANE: page = 0)
+GET {{host}}/api/Matches/list?page=0&pageSize=10
+
+### Matches - list (VIGANE: pageSize = 0)
+GET {{host}}/api/Matches/list?page=1&pageSize=0
+
+### Matches - list (VIGANE: pageSize = 1000)
+GET {{host}}/api/Matches/list?page=1&pageSize=1000
+
+### Users - list (VIGANE: page = 0)
+GET {{host}}/api/Users/list?page=0&pageSize=10
+
+### Users - list (VIGANE: pageSize = 0)
+GET {{host}}/api/Users/list?page=1&pageSize=0
+
+### Users - list (VIGANE: pageSize = 1000)
+GET {{host}}/api/Users/list?page=1&pageSize=1000
+
+### Predictions - list (VIGANE: page = 0)
+GET {{host}}/api/Predictions/list?page=0&pageSize=10
+
+### Predictions - list (VIGANE: pageSize = 0)
+GET {{host}}/api/Predictions/list?page=1&pageSize=0
+
+### Predictions - list (VIGANE: pageSize = 1000)
+GET {{host}}/api/Predictions/list?page=1&pageSize=1000
+
+
+### Teams - save (VIGANE: liiga pikk nimi, 101 märki)
+POST {{host}}/api/Teams/save
+Content-Type: application/json
+
+{ "id": 0, "name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }
+
+### Teams - save (VIGANE: id < 0)
+POST {{host}}/api/Teams/save
+Content-Type: application/json
+
+{ "id": -1, "name": "Negatiivne" }
+
+### Teams - delete (VIGANE: võistkond osaleb mängus)
+# Mängu 71 koduvõistkond on 3, vt. Matches - save (uus)
+DELETE {{host}}/api/Teams/delete
+Content-Type: application/json
+
+{ "id": 3 }
+
+### Tournaments - save (VIGANE: dubleeriv nimi)
+POST {{host}}/api/Tournaments/save
+Content-Type: application/json
+
+{ "id": 0, "name": "FIFA World Cup 1930" }
+
+### Tournaments - save (muutmine ilma nime muutmata - EI TOHI anda dubleerimise viga)
+POST {{host}}/api/Tournaments/save
+Content-Type: application/json
+
+{ "id": 1, "name": "FIFA World Cup 1930" }
+
+### Tournaments - delete (VIGANE: turniiri mängudele on ennustusi)
+DELETE {{host}}/api/Tournaments/delete
+Content-Type: application/json
+
+{ "id": 17 }
+
+### Matches - save (VIGANE: koduvõistkond = külalisvõistkond)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 2, "stage": 3, "startTime": "2030-07-01T18:00:00", "homeTeamId": 3, "awayTeamId": 3 }
+
+### Matches - save (VIGANE: võistkonda ei ole)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 2, "stage": 3, "startTime": "2030-07-01T18:00:00", "homeTeamId": 99999, "awayTeamId": 4 }
+
+### Matches - save (VIGANE: alguse aeg puudub)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 2, "stage": 3, "homeTeamId": 3, "awayTeamId": 4 }
+
+### Matches - save (VIGANE: tulemusest ainult üks väärtus)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 2, "stage": 3, "startTime": "2020-07-01T18:00:00", "homeTeamId": 3, "awayTeamId": 4, "homeTeamGoals": 2 }
+
+### Matches - save (VIGANE: tulemus mängule, mis pole veel alanud)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 2, "stage": 3, "startTime": "2030-07-01T18:00:00", "homeTeamId": 3, "awayTeamId": 4, "homeTeamGoals": 2, "awayTeamGoals": 1 }
+
+### Matches - save (VIGANE: tulemus, aga võistkonnad on teadmata)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 2, "stage": 3, "startTime": "2020-07-01T18:00:00", "homeTeamGoals": 2, "awayTeamGoals": 1 }
+
+### Matches - save (KORREKTNE: mäng koos tulemusega minevikus)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 2, "stage": 3, "startTime": "2020-07-01T18:00:00", "homeTeamId": 3, "awayTeamId": 4, "homeTeamGoals": 2, "awayTeamGoals": 1 }
+
+### Matches - save (KORREKTNE: mäng ilma võistkondadeta tulevikus)
+POST {{host}}/api/Matches/save
+Content-Type: application/json
+
+{ "id": 0, "tournamentId": 2, "stage": 2, "startTime": "2030-07-05T18:00:00" }
+
+### Matches - delete (VIGANE: mängule on ennustusi)
+DELETE {{host}}/api/Matches/delete
+Content-Type: application/json
+
+{ "id": 33 }
+
+### Users - save (VIGANE: nimi puudub)
+POST {{host}}/api/Users/save
+Content-Type: application/json
+
+{ "id": 0, "name": "", "email": "nimeta@example.com", "password": "Parool123!", "role": 0 }
+
+### Users - save (VIGANE: parool liiga lühike)
+POST {{host}}/api/Users/save
+Content-Type: application/json
+
+{ "id": 0, "name": "Lühike Parool", "email": "luhike@example.com", "password": "abc", "role": 0 }
+
+### Users - save (VIGANE: role = 99)
+POST {{host}}/api/Users/save
+Content-Type: application/json
+
+{ "id": 0, "name": "Vigane Roll", "email": "roll@example.com", "password": "Parool123!", "role": 99 }
+
+### Users - save (KORREKTNE: muutmine ilma paroolita)
+POST {{host}}/api/Users/save
+Content-Type: application/json
+
+{ "id": 1, "name": "Mart Tamm", "email": "mart.tamm@example.com", "role": 1 }
+
+### Predictions - save (VIGANE: mäng on juba alanud)
+POST {{host}}/api/Predictions/save
+Content-Type: application/json
+
+{ "id": 0, "userId": 1, "matchId": 1, "homeTeamGoals": 1, "awayTeamGoals": 1 }
+
+### Predictions - save (VIGANE: mängu võistkonnad on teadmata)
+POST {{host}}/api/Predictions/save
+Content-Type: application/json
+
+{ "id": 0, "userId": 1, "matchId": 69, "homeTeamGoals": 1, "awayTeamGoals": 1 }
+
+### Predictions - save (VIGANE: mängu ei ole)
+POST {{host}}/api/Predictions/save
+Content-Type: application/json
+
+{ "id": 0, "userId": 1, "matchId": 99999, "homeTeamGoals": 1, "awayTeamGoals": 1 }
+
+### Predictions - save (KORREKTNE: teine kasutaja samale mängule)
+POST {{host}}/api/Predictions/save
+Content-Type: application/json
+
+{ "id": 0, "userId": 3, "matchId": 71, "homeTeamGoals": 3, "awayTeamGoals": 3 }
+
+
+############ FAILID (võistkonna lipp/logo) ############
+# NB! Võistkonna 3 failid salvestatakse kausta <FilesRoot>/teams/3/
+# Kasuta ID-na võistkonda, mis olemas on (vt. Teams - list).
+
+@teamId = 3
+# Pärast "listfiles" päringut kopeeri siia mõne faili nimi (GUID + laiend):
+@fileName = kopeeri-siia-failinimi.png
+
+### Teams - addfile (KORREKTNE: PNG)
+POST {{host}}/api/Teams/addfile?id={{teamId}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="lipp.png"
+Content-Type: image/png
+
+< ./TestFiles/lipp.png
+--WebAppBoundary--
+
+### Teams - addfile (VIGANE: ei ole pilt, .txt)
+POST {{host}}/api/Teams/addfile?id={{teamId}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="tekst.txt"
+Content-Type: text/plain
+
+< ./TestFiles/tekst.txt
+--WebAppBoundary--
+
+### Teams - addfile (VIGANE: võistkonda ei ole)
+POST {{host}}/api/Teams/addfile?id=99999
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="lipp.png"
+Content-Type: image/png
+
+< ./TestFiles/lipp.png
+--WebAppBoundary--
+
+### Teams - addfile (VIGANE: id = 0)
+POST {{host}}/api/Teams/addfile?id=0
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="lipp.png"
+Content-Type: image/png
+
+< ./TestFiles/lipp.png
+--WebAppBoundary--
+
+### Teams - addfile (VIGANE: faili ei lisatud)
+POST {{host}}/api/Teams/addfile?id={{teamId}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="midagi"
+
+tühi
+--WebAppBoundary--
+
+### Teams - listfiles (võistkonna failid)
+GET {{host}}/api/Teams/listfiles/{{teamId}}
+
+### Teams - listfiles (KORREKTNE: võistkonnal pole faile, tühi list)
+GET {{host}}/api/Teams/listfiles/5
+
+### Teams - listfiles (VIGANE: võistkonda ei ole)
+GET {{host}}/api/Teams/listfiles/99999
+
+### Teams - getfile (KORREKTNE: tagastab pildi)
+GET {{host}}/api/Teams/getfile/{{teamId}}/{{fileName}}
+
+### Teams - getfile (VIGANE: faili ei ole, 404)
+GET {{host}}/api/Teams/getfile/{{teamId}}/olematu-fail.png
+
+### Teams - getfile (VIGANE: võistkonda ei ole)
+GET {{host}}/api/Teams/getfile/99999/{{fileName}}
+
+### Teams - getfile (VIGANE: kaustateega failinimi)
+GET {{host}}/api/Teams/getfile/{{teamId}}/..%2F..%2Fappsettings.json
+
+### Teams - deletefile (KORREKTNE)
+DELETE {{host}}/api/Teams/deletefile
+Content-Type: application/json
+
+{ "teamId": {{teamId}}, "fileName": "{{fileName}}" }
+
+### Teams - deletefile (VIGANE: faili ei ole)
+DELETE {{host}}/api/Teams/deletefile
+Content-Type: application/json
+
+{ "teamId": {{teamId}}, "fileName": "olematu-fail.png" }
+
+### Teams - deletefile (VIGANE: kaustateega failinimi)
+DELETE {{host}}/api/Teams/deletefile
+Content-Type: application/json
+
+{ "teamId": {{teamId}}, "fileName": "../../appsettings.json" }
+
+### Teams - deletefile (VIGANE: failinimi puudub)
+DELETE {{host}}/api/Teams/deletefile
+Content-Type: application/json
+
+{ "teamId": {{teamId}} }
+
+### Teams - deletefile (VIGANE: võistkonda ei ole)
+DELETE {{host}}/api/Teams/deletefile
+Content-Type: application/json
+
+{ "teamId": 99999, "fileName": "x.png" }
+
+# Võistkonna kustutamine peab kustutama ka tema failid:
+# 1) "Teams - save (uus)" loob võistkonna Testimaa (esimene vaba ID, seedi järel 36)
+# 2) lisa sellele fail, 3) kustuta võistkond, 4) kontrolli, et kaust <FilesRoot>/teams/36 on tühi
+
+@newTeamId = 36
+
+### Teams - addfile (uuele võistkonnale)
+POST {{host}}/api/Teams/addfile?id={{newTeamId}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="lipp.png"
+Content-Type: image/png
+
+< ./TestFiles/lipp.png
+--WebAppBoundary--
+
+### Teams - delete (uus võistkond koos failiga)
+DELETE {{host}}/api/Teams/delete
+Content-Type: application/json
+
+{ "id": {{newTeamId}} }
+

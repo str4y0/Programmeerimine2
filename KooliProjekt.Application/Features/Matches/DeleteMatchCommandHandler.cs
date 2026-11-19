@@ -21,7 +21,7 @@ namespace KooliProjekt.Application.Features.Matches
         {
             var result = new OperationResult();
 
-            // Mängu ennustused kustuvad andmebaasis kaskaadina
+            // Mängu, millele on ennustusi tehtud, ei saa kustutada (vt. DeleteMatchCommandValidator)
 
             var deleted = await _dbContext.Matches
                 .Where(item => item.Id == request.Id)

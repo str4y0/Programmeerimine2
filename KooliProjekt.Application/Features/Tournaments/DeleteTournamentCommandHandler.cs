@@ -21,7 +21,8 @@ namespace KooliProjekt.Application.Features.Tournaments
         {
             var result = new OperationResult();
 
-            // Turniiri mängud ja mängude ennustused kustuvad andmebaasis kaskaadina
+            // Turniiri mängud kustuvad andmebaasis kaskaadina. Turniiri, mille mängudele on
+            // ennustusi tehtud, ei saa kustutada (vt. DeleteTournamentCommandValidator)
 
             var deleted = await _dbContext.Tournaments
                 .Where(item => item.Id == request.Id)
